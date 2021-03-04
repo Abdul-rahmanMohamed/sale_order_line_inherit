@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="installment_amount_wizard_view_form" model="ir.ui.view">
+        <field name="name">installment_amount_wizard.form</field>
+        <field name="model">installment_amount_wizard</field>
+        <field name="arch" type="xml">
+            <form string="Register Payment">
+                <group>
+                    <field name="name"/>
+                    <field name="date"/>
+                </group>
+                <group>
+                    <field name="reference"/>
+                    <field name="journal"/>
+                    <field name="amount"/>
+                </group>
+                <footer>
+                    <button string='Validate' name="post_payment" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="installment_amount_wizard_popup_action" model="ir.actions.act_window">
+        <field name="name">Register Amount Type</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">installment_amount_wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="installment_amount_wizard_view_form"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

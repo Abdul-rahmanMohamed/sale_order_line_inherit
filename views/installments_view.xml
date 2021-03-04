@@ -1,0 +1,177 @@
+<?xml version="1.0"?>
+<odoo>
+    <!--    Form View -->
+    <record model="ir.ui.view" id="installment_form_view">
+        <field name="name">installment.form</field>
+        <field name="model">installment.installment</field>
+        <field name="arch" type="xml">
+            <form string="Installments">
+                <header>
+                    <button name="open_registration" string="Open" states="draft" type="object"/>
+                    <button name="open_invoice" string="Invoice" type="object"
+                            class="oe_highlight" icon="fa-money" groups="installment.group_manager_installment"/>
+                    <button name="settlement_paid" class="oe_highlight" string="Settlement" states="open"
+                            attrs="{'invisible': [('state', '=', 'paid')]}"
+                            type="object"/>
+                    <button name="%(installment.installment_amount_wizard_popup_action)d" type="action"
+                            attrs="{'invisible': [('state', '=', 'paid')]}"
+                            class="oe_highlight" string="Payment" icon="fa-check text-success"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <tr>
+                            <td width="50%">
+                                <h1>
+                                    <field name="ref"/>
+                                </h1>
+                            </td>
+                            <td width="10%" string="Name">
+                                <h2>
+                                    <field name="name"/>
+                                </h2>
+                            </td>
+                        </tr>
+                    </div>
+                    <group>
+                        <field name="name"/>
+                        <field name="customer"/>
+                        <field name="amount"/>
+                    </group>
+                    <group>
+                        <field name="reference"/>
+                        <field name="account"/>
+                        <field name="date"/>
+                    </group>
+                    <group>
+                        <field name="journal"/>
+                    </group>
+                    <notebook>
+                        <page string="Note">
+                            <field name="note" placeholder="Add an internal note..." nolabel="1" height="50"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!--List View -->
+    <record model="ir.ui.view" id="installment_tree_view">
+        <field name="name">installment.installment.tree</field>
+        <field name="model">installment.installment</field>
+        <field name="arch" type="xml">
+            <tree string="Payments" decoration-info="amount&lt;100" decoration-danger="amount&gt;1000">
+                <field name="ref"/>
+                <field name="name"/>
+                <field name="customer"/>
+                <field name="amount" widget="progressbar" sum="Total Of Amounts of Invoices"/>
+                <field name="date"/>
+            </tree>
+        </field>
+    </record>
+    <!--Kanban View-->
+    <record model="ir.ui.view" id="installment.kanban_view">
+        <field name="name">installment.installment.kanban</field>
+        <field name="model">installment.installment</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="journal">
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div
+                                t-attf-class="oe_kanban_color_{{kanban_getcolor(record.color.raw_value)}}
+                                                  oe_kanban_global_click_edit oe_semantic_html_override
+                                                  oe_kanban_card {{record.group_fancy==1 ? 'oe_kanban_card_fancy' : ''}}">
+                            <div class="oe_dropdown_kanban">
+                                <!-- dropdown menu -->
+                                <div class="oe_dropdown_toggle">
+                                    <i class="fa fa-bars fa-lg" title="Manage" aria-label="Manage"/>
+                                    <ul class="oe_dropdown_menu">
+                                        <li>
+                                            <a type="delete">Delete</a>
+                                        </li>
+                                        <li>
+                                            <ul class="oe_kanban_colorpicker"
+                                                data-field="color"/>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="oe_clear"/>
+                            </div>
+                            <div t-attf-class="oe_kanban_content">
+                                <!-- title -->
+                                Invoice_ID:
+                                <field name="ref"/>
+                                <br/>
+                                Invoice name:
+                                <field name="name"/>
+                                <br/>
+                                date:
+                                <field name="date"/>
+                                <br/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <!--Search View -->
+    <record model="ir.ui.view" id="installment_search_view">
+        <field name="name">installment.search</field>
+        <field name="model">installment.installment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="ref"/>
+                <filter name="customer" string="My Invoices"
+                        domain="[('customer', '=', uid)]"/>
+            </search>
+        </field>
+    </record>
+    <!--    Graph View -->
+    <record id="installment_graph_view" model="ir.ui.view">
+        <field name="name">installment Graph</field>
+        <field name="model">installment.installment</field>
+        <field name="arch" type="xml">
+            <graph string="Installments and payments analysis">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="amount" groups="installment.group_manager_installment" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!--    Pivot View -->
+    <record id="installment_pivot_view" model="ir.ui.view">
+        <field name="name">installment.installment.pivot</field>
+        <field name="model">installment.installment</field>
+        <field name="arch" type="xml">
+            <pivot string="Invoices Analysis" disable_linking="True">
+                <field name="name" type="row"/>
+                <field name="date" type="col"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!--Action-->
+    <record model="ir.actions.act_window" id="installment.action_window">
+        <field name="name">CUSTOMER_INVOICE</field>
+        <field name="res_model">installment.installment</field>
+        <field name="view_mode">tree,form,kanban,search,graph,pivot</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create Your New INVOICE
+            </p>
+        </field>
+    </record>
+
+    <menuitem name="Odoo dev Tsak" id="installment.menu_root"/>
+    <menuitem name="Installments" id="customer_inst"
+              parent="installment.menu_root"/>
+    <menuitem name="Customer installments" id="sub_menuitem"
+              parent="customer_inst"
+              action="installment.action_window"/>
+</odoo>

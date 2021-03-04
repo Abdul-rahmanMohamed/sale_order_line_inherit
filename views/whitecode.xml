@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="review_button_inherit_whitecode" model="ir.ui.view">
+        <field name="name">sales.invoice.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <!--        <field name="groups_id" eval="[(4, ref('sale.group_auto_done_setting'))]"/>-->
+        <field name="arch" type="xml">
+            <xpath expr="//form//header//button[@name='action_post']" position="before">
+                <button name="action_review" type="object" string="Review" class="oe_highlight"
+                        attrs="{'invisible': ['|', ('state','=','review'), ('state', '=', 'posted')]}"
+                        groups="installment.group_advisor_review_button"/>
+            </xpath>
+            <field name="state" position="attributes">
+                <attribute name="statusbar_visible">draft,review,posted</attribute>
+            </field>
+        </field>
+    </record>
+    <record id="sale_order_inherit" model="ir.ui.view">
+        <field name="name">sale.order.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Included Sevrices">
+                    <group>
+                        <field name="included_services" widget="many2many_tags"/>
+                    </group>
+                </page>
+            </xpath>
+            <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_id']"
+                   position="after">
+                <field name="size" string="Size"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="sale_order_inherit_delivery" model="ir.ui.view">
+        <field name="name">sale.order.inherit_delivery</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="/form/sheet/notebook/page/field[@name='move_ids_without_package']/tree/field[@name='product_id']"
+                   position="after">
+                <field name="size" string="Size"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

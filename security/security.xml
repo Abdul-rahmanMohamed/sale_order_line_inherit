@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.module.category" id="module_category_advisor">
+        <field name="name">Review Button Management</field>
+        <field name="description">accessed only by advisor</field>
+    </record>
+    <record id="group_user_review" model="res.groups">
+        <field name="name">user Review button in sales invoice</field>
+        <field name="category_id" ref="module_category_advisor"/>
+    </record>
+    <record id="group_advisor_review_button" model="res.groups">
+        <field name="name">advisor Review button in sales invoice</field>
+        <field name="category_id" ref="module_category_advisor"/>
+    </record>
+</odoo>
+
+
+        <!--<?xml version="1.0" encoding="utf-8"?>-->
+        <!--<odoo>-->
+        <!--    <data>-->
+        <!--        <record id="group_user_installment" model="res.groups">-->
+        <!--            <field name="name">user installment</field>-->
+        <!--            <field name="category_id" ref="base.module_category_hidden"/>-->
+        <!--        </record>-->
+        <!--        <record id="group_advisor_installment" model="res.groups">-->
+        <!--            <field name="name">advisor installment</field>-->
+        <!--            <field name="category_id" ref="base.module_category_hidden"/>-->
+        <!--        </record>-->
+
+        <!--        <record id="installment_installment_rule" model="ir.rule">-->
+        <!--            <field name="name">user installment</field>-->
+        <!--            <field name="model_id" ref="model_installment_installment"/>-->
+        <!--            <field name="groups" eval="[-->
+        <!--                (4, ref('installment.group_user_installment'))]"/>-->
+        <!--            <field name="domain_force">[('create_uid','=',user.id)]</field>-->
+        <!--        </record>-->
+        <!--        <record id="installment_installment_manager_rule" model="ir.rule">-->
+        <!--            <field name="name">manager installment</field>-->
+        <!--            <field name="model_id" ref="model_installment_installment"/>-->
+        <!--            <field name="groups" eval="[-->
+        <!--                        (4, ref('installment.group_advisor_installment'))]"/>-->
+        <!--            <field name="domain_force">[(1,'=',1)]</field>-->
+        <!--        </record>-->
+        <!--    -->
+
+        <!--        <record id="delete_edit_only_manager_rule" model="ir.rule">-->
+        <!--            <field name="name">any user can delete and edit Only</field>-->
+        <!--            <field name="model_id" ref="model_installment_installment"/>-->
+        <!--            <field name="domain_force">[('state', '=', 'draft')]</field>-->
+        <!--            <field name="perm_read" eval="1"/>-->
+        <!--            <field name="perm_write" eval="1"/>-->
+        <!--            <field name="perm_create" eval="0"/>-->
+        <!--            <field name="perm_unlink" eval="1"/>-->
+        <!--            <field name="groups" eval="[(4, ref('base.group_user'))]"/>-->
+        <!--        </record>-->
+        <!--</data>-->
+        <!--</odoo>-->

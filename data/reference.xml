@@ -1,0 +1,12 @@
+<odoo>
+    <data noupdate="1">
+        <!-- Sequences for sale.order -->
+        <record id="seq_installment_installment" model="ir.sequence">
+            <field name="name">Payment Sequence</field>
+            <field name="code">installment.installment.sequence</field>
+            <field name="prefix">Py</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>
